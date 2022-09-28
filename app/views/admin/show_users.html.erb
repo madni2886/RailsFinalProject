@@ -1,0 +1,22 @@
+<table class="table">
+  <thead>
+  <tr>
+
+    <th scope="col">Id</th>
+    <th scope="col">Name</th>
+    <th scope="col">Email</th>
+    <th scope="col">Plan</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <% @user.each do |user| %>
+
+    <tr>
+      <td><%=user.id %></td>
+      <td><%=user.username %></td>
+      <td><%=user.email %></td>
+      <%=binding.pry%>>
+       <td><%= link_to "Change Plan", change_plan_admin_user_path(@admin,@user)%>
+  <% end %>
+  </table>

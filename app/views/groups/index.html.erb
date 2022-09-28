@@ -1,0 +1,57 @@
+<h1>Groups</h1>
+<%= link_to "Create Group", new_user_group_path(current_user)%>
+<table class="table">
+  <thead>
+  <tr>
+
+    <th scope="col">Id</th>
+    <th scope="col">Title</th>
+    <th scope="col">type</th>
+    <th scope="col">Show</th>
+    <th scope="col">Join</th>
+  </tr>
+  </thead>
+<tbody>
+
+<% @group.each do |group| %>
+
+  <tr>
+
+    <%y=group.memberships.where(user_id:current_user.id)%>
+
+    <% if y[0]==nil%>
+      <%userid=-1 %>
+      <% req=false%>
+    <%else %>
+      <%userid=y[0].user_id %>
+      <%req=y[0].req%>
+    <%end %>
+
+
+    <td><%=group.id %></td>
+    <td><%=group.title %></td>
+    <td><%=group.group_type %></td>
+
+    <%if req==true||group.group_type=="public"||group.group_type=="Public" %>
+      <td> <%= link_to "SHOW", user_group_path(current_user,group)%></td>
+    <%else %>
+      <td>Your have not followed yet</td>
+      <%end %>
+      <%x=group.memberships.where(user_id:current_user.id)%>
+
+     <% if x[0]==nil%>
+      <%userid=-1 %>
+      <%else %>
+
+        <%userid=x[0].user_id %>
+      <%end %>
+
+        <td> <%= link_to "Join", join_user_group_path(current_user,group)%></td>
+
+    <%#= link_to "join", join_group_path(group)%>
+<!--    </td>-->
+  </tr>
+
+<% end %>
+</table>
+</tbody>

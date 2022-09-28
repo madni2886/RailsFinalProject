@@ -1,0 +1,32 @@
+<table class="table">
+
+<thead>
+<tr>
+
+  <th scope="col">Member id</th>
+  <th scope="col">User id</th>
+  <th scope="col">Req</th>
+
+</tr>
+</thead>
+<% @membership.each do |member| %>
+
+    <tbody>
+  <tr>
+    <td><%=member.id %></td>
+    <td><%=member.user_id %></td>
+    <% if member.req==true%>
+      <td>He is following the group</td>
+    <%else%>
+      <td>
+      <%= link_to "Accept Request", accept_request_user_group_path(member.user_id,member.group_id),remote:true,
+                  data: { turbo_method: :accept_request, turbo_confirm: "Are you sure?"},
+                  class: "btn btn-xs btn-danger"  %>
+    <%end %>
+    </td>
+      </tr>
+    </tbody>
+
+
+<% end %>
+</table>
