@@ -6,17 +6,18 @@
     <th scope="col">Name</th>
     <th scope="col">Email</th>
     <th scope="col">Plan</th>
+    <th scope="col">Action plan</th>
   </tr>
   </thead>
   <tbody>
 
-  <% @user.each do |user| %>
+  <% @users.each do |user| %>
 
     <tr>
       <td><%=user.id %></td>
       <td><%=user.username %></td>
       <td><%=user.email %></td>
-      <%=binding.pry%>>
-       <td><%= link_to "Change Plan", change_plan_admin_user_path(@admin,@user)%>
+      <td><%=user.plan %></td>
+       <td><%= link_to "Change Plan", change_plan_admin_user_path(@admin,user)%>
   <% end %>
   </table>

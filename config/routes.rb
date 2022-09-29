@@ -11,7 +11,11 @@ Rails.application.routes.draw do
     end
 
   end
-
+  resources :admin do
+    resources :user do
+      get 'change_plan', on: :member
+    end
+  end
   get 'posts/index'
   get 'posts/new'
   get 'posts/edit'
@@ -28,11 +32,7 @@ Rails.application.routes.draw do
     get 'logout' => 'devise/sessions#destroy'
 
   end
-  resources :admin do
-    resources :user do
-       get 'change_plan', on: :member
-    end
-    end
+
   get "showUser", to: "admin#show_users"
 
   root 'groups#index'
