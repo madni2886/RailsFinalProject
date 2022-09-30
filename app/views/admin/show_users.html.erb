@@ -1,13 +1,15 @@
 <table class="table">
   <thead>
   <tr>
-
     <th scope="col">Id</th>
     <th scope="col">Name</th>
     <th scope="col">Email</th>
     <th scope="col">Plan</th>
+    <th scope="col">User Type</th>
+    <%if current_user.has_role? :admin %>
     <th scope="col">Action plan</th>
-  </tr>
+    <%end %>
+      </tr>
   </thead>
   <tbody>
 
@@ -18,6 +20,13 @@
       <td><%=user.username %></td>
       <td><%=user.email %></td>
       <td><%=user.plan %></td>
-       <td><%= link_to "Change Plan", change_plan_admin_user_path(@admin,user)%>
+      <%if user.has_role? :admin %>
+      <td>Admin</td>
+        <%else %>
+        <td>Simple User</td>
+        <%end%>
+      <%if current_user.has_role? :admin %>
+      <td><%= link_to "Change Plan", change_plan_admin_user_path(@admin,user)%></td>
+      <%end%>
   <% end %>
   </table>

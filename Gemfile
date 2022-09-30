@@ -5,6 +5,10 @@ ruby '3.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.0.0'
+#gem for role
+gem "rolify"
+#gem file for authorization
+gem 'cancancan'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 gem 'bootstrap-sass', '~> 3.4', '>= 3.4.1'
