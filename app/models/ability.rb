@@ -6,12 +6,20 @@ class Ability
   def initialize(user)
     if user.has_role? :admin
        can :manage, :all
+    elsif user.plan=="basic"
+      can :manage, Group
+      can :manage, Post, user_id:user.id
+      can :create, Post, user_id:user.id
+      cannot :create, Group
     elsif user.plan=="Premium"
       can :manage, Group
-
+      can :manage, Post, user_id:user.id
+      can :create, Post, user_id:user.id
+      can :create, Group
     else
       can :manage, Post, user_id:user.id
-      can :create, Post
+      can :create, Post, user_id:user.id
+
 
 
 

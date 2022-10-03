@@ -1,5 +1,10 @@
 class GroupsController < ApplicationController
   load_and_authorize_resource
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:notice] ="User is not admin nor premium"
+    redirect_back(fallback_location: root_path)
+
+  end
   def index
     @group=Group.all
   end
@@ -11,6 +16,8 @@ class GroupsController < ApplicationController
     @join = @group.memberships.build(:user_id => current_user.id,:req=>1)
     respond_to do |format|
       if @group.save||@join.save
+        UserMailer.with(user:current_user,group:@group).oncreate.deliver_now
+
         format.html { redirect_to root_path, notice: "Group was successfully created." }
 
       else

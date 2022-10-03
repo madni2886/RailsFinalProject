@@ -1,5 +1,10 @@
 class UserController < ApplicationController
   load_and_authorize_resource
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:notice] ="You are not admin"
+    redirect_back(fallback_location: root_path)
+
+  end
   def change_plan
 
     @admin=current_user

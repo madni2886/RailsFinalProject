@@ -1,6 +1,10 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:notice] ="User not found"
+    redirect_back(fallback_location: root_path)
 
+  end
   def index
     @group = Group.find(params[:group_id])
     @post=Post.all
@@ -22,8 +26,11 @@ class PostsController < ApplicationController
       end
     end
   end
-  def edit
+  def show_posts
+    @post=Post.all
 
+  end
+  def edit
   end
 
   def show

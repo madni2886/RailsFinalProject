@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     get 'logout' => 'devise/sessions#destroy'
 
   end
+  get "posts",to:"posts#show_posts"
   get "showUser", to: "admin#show_users"
   root 'groups#index'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
