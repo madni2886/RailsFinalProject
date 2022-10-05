@@ -1,6 +1,6 @@
 <%x=@group.users %>
 
 <% if x[0].id==current_user.id %>
-<%= link_to "Show Request",  show_request_user_group_path(current_user,@group)%>
+<%= link_to "Show Request",  show_request_user_group_path(current_user,@group),class: "btn btn-xs btn-primary"%>
   <%end%>
 <%= render 'posts/index'%>

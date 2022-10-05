@@ -1,3 +1,113 @@
 // Place all the styles related to the Groups controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+#logo
+{
+  float:left;
+
+  color:black;
+  text-transform:uppercase;
+  letter-spacing: -1px;
+  font-weight: bold;
+}
+
+#new-article
+{
+  font-size:0.6cm;
+  color:white;
+  text-transform:uppercase;
+  letter-spacing: -1px;
+  padding:20px;
+}
+
+#logo:hover{
+  color:#F7F7F7;
+  text-decoration: none;
+}
+#new-article:hover{
+  color:grey;
+  text-decoration: none;
+}
+.center{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+}
+.article-title {
+
+  font-weight: bold;
+
+  font-size: 1.5em;
+
+}
+
+.article-body {
+
+  border-top: 1px solid #eaeaea;
+
+  padding-top: 15px;
+
+  padding-bottom: 15px;
+
+}
+ul{
+  list-style-type: none;
+
+  padding-left:0;
+}
+.article-meta-details {
+
+  border-top: 1px solid #eaeaea;
+
+  margin-top: 15px;
+
+}
+.full-img {
+  object-fit: contain;
+  height: 100%;
+  width: 500px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.flex_products{
+  display: flex;
+  flex-wrap: wrap;
+}
+.image:hover{
+  transform: scale(1.1);
+}
+.image{
+  width:250px;
+  height:300px;
+  border-radius: 10%;
+}
+.products{
+  padding: 30px;
+}
+.title{
+  display: flex;
+  justify-content: center;
+  width:250px;
+  font-weight: bold;
+  color: #2E2F30;
+  font-size: 18px;
+
+}
+.desc{
+  display: flex;
+  width:250px;
+  font-size: 16px;
+  flex-wrap: wrap;
+
+}
+.user_image{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  left: 70px;
+  border-radius: 70%;
+  width:200px;
+  height:150px;
+}

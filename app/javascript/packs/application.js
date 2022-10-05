@@ -3,6 +3,11 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
+//= require jquery
+//= require best_in_place
+
+//= require jquery-ui
+//= require best_in_place.jquery-ui
 import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
@@ -30,6 +35,7 @@ document.addEventListener("turbolinks:load", () => {
         return new Popover(popoverTriggerEl)
     })
 })
+
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()

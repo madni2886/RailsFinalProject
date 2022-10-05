@@ -5,7 +5,11 @@ Rails.application.routes.draw do
 
   resources :user do
     resources :groups do
-      resources :posts
+      resources :posts do
+
+      resources :comments do
+      end
+      end
       get 'join', on: :member
       get 'show_request', on: :member
       get 'accept_request', on: :member

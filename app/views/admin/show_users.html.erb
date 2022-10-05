@@ -4,7 +4,11 @@
     <th scope="col">Id</th>
     <th scope="col">Name</th>
     <th scope="col">Email</th>
+    <th scope="col">Created Groups</th>
+    <th scope="col">Joined Groups</th>
     <th scope="col">Plan</th>
+
+
     <th scope="col">User Type</th>
     <%if current_user.has_role? :admin %>
     <th scope="col">Action plan</th>
@@ -19,6 +23,8 @@
       <td><%=user.id %></td>
       <td><%=user.username %></td>
       <td><%=user.email %></td>
+      <td><%=user.groups.count %></td>
+      <td><%=user.memberships.count %></td>
       <td><%=user.plan %></td>
       <%if user.has_role? :admin %>
       <td>Admin</td>

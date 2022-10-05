@@ -20,7 +20,7 @@
     <%else%>
       <td>
       <%= link_to "Accept Request", accept_request_user_group_path(member.user_id,member.group_id),remote:true,
-                  data: { turbo_method: :accept_request, turbo_confirm: "Are you sure?"},
+                  form: { data: {turbo_confirm: 'Are you sure?'} },
                   class: "btn btn-xs btn-danger"  %>
     <%end %>
     </td>

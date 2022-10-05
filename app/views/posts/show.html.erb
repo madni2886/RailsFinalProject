@@ -1,2 +1,17 @@
-<h1>Posts#show</h1>
-<p>Find me in app/views/posts/show.html.erb</p>
+
+<strong>Title:</strong> <%=best_in_place [current_user,@group,@post], :title,:as => :textarea%><br>
+  <strong>Description: </strong> <%=@post.description%></p></div>
+<hr>
+<strong>
+  Comments:
+</strong>
+
+<% @post.comments.each do |comment| %>
+  <p><%= comment.comment %>
+    created by <%=comment.user.username %>
+  </p>
+<% end%>
+
+<%= render 'comments/new',comment:@post.comments.build %>
+
+

@@ -34,7 +34,9 @@ class PostsController < ApplicationController
   end
 
   def show
-    @post=@group.posts.all
+
+    @group = Group.find(params[:group_id])
+    @post = @group.posts.find(params[:id])
   end
   private
   def get_group

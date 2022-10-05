@@ -4,8 +4,10 @@ class UserMailer < ApplicationMailer
      @greeting = "Hi"
      @user=params[:user]
      @group=params[:group]
+     x=@group.users
+
     mail(
-      to: "f180216@nu.edu.pk",
+      to: x[0].email,
       subject: "new Group created",
       message:@greeting
 

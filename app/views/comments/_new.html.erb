@@ -1,0 +1,14 @@
+<%= form_with(model: [current_user,@post.group,@post,comment]) do |form| %>
+
+
+  <%= form.hidden_field :article_id %>
+
+  <%= form.label :text, "Text:" %>
+  <%= form.text_area :comment %>
+
+  <div class="actions">
+    <div class= "btn btn-xs btn-danger" >
+    <%= form.submit %>
+    </div>
+  </div>
+<% end %>

@@ -1,25 +1,8 @@
-<h1>Groups</h1>
-<%= link_to "Create Group", new_user_group_path(current_user)%>
-
-<table class="table">
-  <thead>
-  <tr>
-
-    <th scope="col">Id</th>
-    <th scope="col">Title</th>
-    <th scope="col">type</th>
-    <th scope="col">Show</th>
-
-    <th scope="col">Action</th>
-
-      </tr>
-  </thead>
-<tbody>
-
-<% @group.each do |group| %>
-
-  <tr>
-
+<h1>Groups
+<%= link_to "Create Group", new_user_group_path(current_user),class: "btn btn-xs btn-primary"%>
+</h1>
+<div class="flex_products">
+  <% @group.each do |group| %>
     <%y=group.memberships.where(user_id:current_user.id)%>
 
     <% if y[0]==nil%>
@@ -29,35 +12,50 @@
       <%userid=y[0].user_id %>
       <%req=y[0].req%>
     <%end %>
+    <%x=group.memberships.where(user_id:current_user.id)%>
 
-
-    <td><%=group.id %></td>
-    <td><%=group.title %></td>
-    <td><%=group.group_type %></td>
-
-    <%if req==true||group.group_type=="public"||group.group_type=="Public" %>
-      <td> <%= link_to "SHOW", user_group_path(current_user,group)%></td>
+    <% if x[0]==nil%>
+      <%userid=-1 %>
     <%else %>
-      <td>Your have not followed yet</td>
-      <%end %>
-      <%x=group.memberships.where(user_id:current_user.id)%>
+      <%userid=x[0].user_id %>
+    <%end %>
 
-     <% if x[0]==nil%>
-        <%userid=-1 %>
-      <%else %>
-       <%userid=x[0].user_id %>
-      <%end %>
 
-    <%m=Membership.find_by(user_id:current_user.id,group_id:group.id)%>
-    <%if m==nil%>
-        <td> <%= link_to "Join", join_user_group_path(current_user,group)%></td>
+    <div class="products" >
+      <% if group.image.attached? %>
+        <div class="title">
+          <%=group.title%>
+        </div>
+        <%= image_tag group.image, class:"image"%>
       <%else%>
-    <td>You have already joined this group</td>
-    <%end%>
-    <%#= link_to "join", join_group_path(group)%>
-<!--    </td>-->
-  </tr>
+        <div class="title">
+          <%= group.title %>
+        </div>
+      <% end %>
 
-<% end %>
-</table>
-</tbody>
+      <div>
+        <small>Created by: <%= group.users[0].email %>,
+          <%= time_ago_in_words(group.created_at) %> ago,<br>
+          last updated: <%= time_ago_in_words(group.updated_at) %> ago</small>
+      </div>
+      <div class="Button">
+        <%if req==true||group.group_type=="public"||group.group_type=="Public" %>
+          <%=  link_to "SHOW", user_group_path(current_user,group), class: "btn btn-xs btn-primary" %>
+        <%else %>
+          <p>Your have not followed yet</p>
+        <%end %>
+        <%m=Membership.find_by(user_id:current_user.id,group_id:group.id)%>
+        <%if m==nil%>
+          <%= link_to link_to "Join", join_user_group_path(current_user,group),
+                      class: "btn btn-xs btn-danger"  %>
+
+
+        <%end%>
+
+      </div>
+    </div>
+
+  <% end %>
+
+</div>
+
