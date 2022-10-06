@@ -1,17 +1,16 @@
-
-<strong>Title:</strong> <%=best_in_place [current_user,@group,@post], :title,:as => :textarea%><br>
-  <strong>Description: </strong> <%=@post.description%></p></div>
+<strong>Title:</strong> <%= best_in_place [current_user, @group, @post], :title, :as => :textarea %><br>
+<strong>Description: </strong> <%= @post.description %></p></div>
 <hr>
 <strong>
   Comments:
 </strong>
 
-<% @post.comments.each do |comment| %>
+<% @post.comments.each do | comment | %>
   <p><%= comment.comment %>
-    created by <%=comment.user.username %>
+    created by <%= comment.user.username %>
   </p>
-<% end%>
+<% end %>
 
-<%= render 'comments/new',comment:@post.comments.build %>
+<%= render 'comments/new', comment: @post.comments.build %>
 
 

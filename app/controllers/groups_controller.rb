@@ -1,22 +1,25 @@
 class GroupsController < ApplicationController
   load_and_authorize_resource
-  rescue_from CanCan::AccessDenied do |exception|
-    flash[:notice] ="User is not admin nor premium"
+  rescue_from CanCan::AccessDenied do | exception |
+    flash[:notice] = "User is not admin nor premium"
     redirect_back(fallback_location: root_path)
 
   end
+
   def index
-    @group=Group.all
+    @group = Group.all
   end
+
   def new
     @group = current_user.groups.new
   end
+
   def create
     @group = current_user.groups.create(group_params)
-    @join = @group.memberships.build(:user_id => current_user.id,:req=>1)
-    respond_to do |format|
-      if @group.save||@join.save
-        UserMailer.with(user:current_user,group:@group).oncreate.deliver_now
+    @join = @group.memberships.build(:user_id => current_user.id, :req => 1)
+    respond_to do | format |
+      if @group.save || @join.save
+        UserMailer.with(user: current_user, group: @group).oncreate.deliver_now
 
         format.html { redirect_to root_path, notice: "Group was successfully created." }
 
@@ -25,56 +28,81 @@ class GroupsController < ApplicationController
       end
     end
   end
+
+  def edit
+
+    @group = Group.find(params[:id])
+    @group.image.attach(params[:image])
+
+  end
+
+  def update
+
+    @group = Group.find(params[:id])
+    if @group.update(group_params)
+      flash[:notice] = "Group was successfully updated"
+
+      redirect_to root_path
+    else
+      render "edit"
+    end
+
+  end
+
   def join
 
     @group = Group.find(params[:id])
     if @group.group_type == "Public"
-    @join = @group.memberships.build(:user_id => current_user.id,:req=>1)
+      @join = @group.memberships.build(:user_id => current_user.id, :req => 1)
 
-    respond_to do |format|
-      if @join.save
-        format.html { redirect_to(user_group_path(current_user,@group), :notice => "You have joined this group.") }
-        format.xml { head :ok }
-      else
-        format.html { redirect_to(user_group_path(current_user,@group), :notice => "You have already joined this group") }
-        format.xml { render :xml => user_group_path(current_user,@group), :status => :unprocessable_entity }
-      end
-    end
-    else
-      @join = @group.memberships.build(:user_id => current_user.id,:req=>0)
-      respond_to do |format|
+      respond_to do | format |
         if @join.save
-      format.html { redirect_to(root_path, :notice => "request successfuly send") }
+          format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have joined this group.") }
+          format.xml { head :ok }
         else
-          format.html { redirect_to(user_group_path(current_user,@group), :notice => "You have already joined this group") }
-          format.xml { render :xml => user_group_path(current_user,@group), :status => :unprocessable_entity }
+          format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have already joined this group") }
+          format.xml { render :xml => user_group_path(current_user, @group), :status => :unprocessable_entity }
+        end
+      end
+    else
+      @join = @group.memberships.build(:user_id => current_user.id, :req => 0)
+      respond_to do | format |
+        if @join.save
+          format.html { redirect_to(root_path, :notice => "request successfuly send") }
+        else
+          format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have already joined this group") }
+          format.xml { render :xml => user_group_path(current_user, @group), :status => :unprocessable_entity }
         end
       end
     end
   end
-
-
-
 
   def show_request
     @group = Group.find(params[:id])
     @membership = @group.memberships
 
   end
+
   def accept_request
 
-    @user=User.find(params[:user_id])
+    @user = User.find(params[:user_id])
     @group = Group.find(params[:id])
-    @membership=@group.memberships.find_by_user_id(@user.id)
-    @membership.req=true
-    @membership.save
+    @membership = @group.memberships.find_by_user_id(@user.id)
+    @membership.req = true
+    if @membership.save
+      redirect_back(fallback_location: root_path)
+
+    end
   end
+
   def show
-    @group= Group.find(params[:id])
-    @post=@group.posts.all
+    @group = Group.find(params[:id])
+    @post = @group.posts.all
   end
+
   private
+
   def group_params
-      params.require(:group).permit(:title, :group_type ,:image,pictures:[])
+    params.require(:group).permit(:title, :group_type, :image, pictures: [])
   end
 end

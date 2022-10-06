@@ -1,25 +1,25 @@
-<%= link_to "Create post", new_user_group_post_path(current_user,@group),class: "btn btn-xs btn-primary"%>
-<%x=@group.users %>
+<%= link_to "Create post", new_user_group_post_path(current_user, @group), class: "btn btn-outline-success" %>
+<% x = @group.users %>
 <hr>
 <i class="fa-solid fa-user">
-<% if x[0].id==current_user.id %>
-  Group Admin
-<% else %>
-  Group Member
-<%end %>
-</i>
-  <%i=0%>
-  <div class="container d-flex flex-wrap align-items-center">
-  <% @post.each do |post| %>
-
-        <div class="cards" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="id"><%=post.id %></h5>
-          <p><%=post.title %></p>
-          <p><%=post.description %></p>
-          <small>Created by: <%= post.user.email %></small>
-          <%= link_to "show", user_group_post_path(current_user,@group,post),class: "btn btn-xs btn-danger"%>
-        </div>
-        </div>
+  <% if x[0].id == current_user.id %>
+    Group Admin
+  <% else %>
+    Group Member
   <% end %>
-  </div>
+</i>
+<% i = 0 %>
+<div class="container d-flex flex-wrap align-items-center">
+  <% @post.each do | post | %>
+
+    <div class="cards" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="id"><%= post.id %></h5>
+        <p><%= post.title %></p>
+        <p><%= post.description %></p>
+        <small>Created by: <%= post.user.email %></small>
+        <%= link_to "show", user_group_post_path(current_user, @group, post), class: "btn btn-outline-success" %>
+      </div>
+    </div>
+  <% end %>
+</div>

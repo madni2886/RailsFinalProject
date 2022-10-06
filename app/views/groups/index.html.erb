@@ -1,56 +1,78 @@
-<h1>Groups
-<%= link_to "Create Group", new_user_group_path(current_user),class: "btn btn-xs btn-primary"%>
+<h1 class="center">Groups</h1>
+<% if current_user.plan == "Premium" %>
+  <%= link_to "Create Group", new_user_group_path(current_user), class: "btn btn-outline-success" %>
+<% end %>
 </h1>
+<hr>
 <div class="flex_products">
-  <% @group.each do |group| %>
-    <%y=group.memberships.where(user_id:current_user.id)%>
+  <% @group.each do | group | %>
+    <% y = group.memberships.where(user_id: current_user.id) %>
 
-    <% if y[0]==nil%>
-      <%userid=-1 %>
-      <% req=false%>
-    <%else %>
-      <%userid=y[0].user_id %>
-      <%req=y[0].req%>
-    <%end %>
-    <%x=group.memberships.where(user_id:current_user.id)%>
+    <% if y[0] == nil %>
+      <% userid = -1 %>
+      <% req = false %>
+    <% else %>
+      <% userid = y[0].user_id %>
+      <% req = y[0].req %>
+    <% end %>
+    <% x = group.memberships.where(user_id: current_user.id) %>
 
-    <% if x[0]==nil%>
-      <%userid=-1 %>
-    <%else %>
-      <%userid=x[0].user_id %>
-    <%end %>
+    <% if x[0] == nil %>
+      <% userid = -1 %>
+    <% else %>
+      <% userid = x[0].user_id %>
+    <% end %>
 
 
-    <div class="products" >
+    <div class="products" ,style=" border-radius: 25px;background: #73AD21;border: 2px solid #73AD21;">
       <% if group.image.attached? %>
         <div class="title">
-          <%=group.title%>
+          <%= group.title %>(<%= group.group_type %>)
+
         </div>
-        <%= image_tag group.image, class:"image"%>
-      <%else%>
+        <div class="con">
+          <%= image_tag group.image, class: "image" %>
+      <% else %>
         <div class="title">
           <%= group.title %>
         </div>
       <% end %>
 
-      <div>
-        <small>Created by: <%= group.users[0].email %>,
-          <%= time_ago_in_words(group.created_at) %> ago,<br>
-          last updated: <%= time_ago_in_words(group.updated_at) %> ago</small>
+      <div class="middle">
+        <div class="text">
+          <small>Created by: <%= group.users[0].email %>,
+            <%= time_ago_in_words(group.created_at) %> ago,<br>
+            last updated: <%= time_ago_in_words(group.updated_at) %> ago</small>
+        </div>
+      </div>
       </div>
       <div class="Button">
-        <%if req==true||group.group_type=="public"||group.group_type=="Public" %>
-          <%=  link_to "SHOW", user_group_path(current_user,group), class: "btn btn-xs btn-primary" %>
-        <%else %>
-          <p>Your have not followed yet</p>
-        <%end %>
-        <%m=Membership.find_by(user_id:current_user.id,group_id:group.id)%>
-        <%if m==nil%>
-          <%= link_to link_to "Join", join_user_group_path(current_user,group),
-                      class: "btn btn-xs btn-danger"  %>
+        <% if req == true || group.group_type == "public" || group.group_type == "Public" %>
+          <p> Visit and enjoy</p>
+
+        <% else %>
+
+          <% if group.memberships.find_by_user_id(current_user.id) != nil && req == false %>
+            <p>Request is pending</p>
+          <% else %>
+            <p>Not followed yet</p>
+          <% end %>
+        <% end %>
+        <% if req == true || group.group_type == "public" || group.group_type == "Public" %>
+          <%= link_to "SHOW", user_group_path(current_user, group), class: "btn btn-outline-success" %>
+        <% end %>
+        <% x = group.users %>
+        <% if x[0].id == current_user.id %>
+          <%= link_to "Edit", edit_user_group_path(current_user, group), class: "btn btn-outline-success", style: "margin:18px;" %>
+        <% end %>
+
+        <% m = Membership.find_by(user_id: current_user.id, group_id: group.id) %>
+        <% if m == nil %>
+          <%= link_to link_to "Join", join_user_group_path(current_user, group),
+                              class: "btn btn-outline-success" %>
 
 
-        <%end%>
+        <% end %>
 
       </div>
     </div>

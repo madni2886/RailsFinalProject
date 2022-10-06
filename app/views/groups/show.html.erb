@@ -1,6 +1,12 @@
 <%x=@group.users %>
 
 <% if x[0].id==current_user.id %>
-<%= link_to "Show Request",  show_request_user_group_path(current_user,@group),class: "btn btn-xs btn-primary"%>
+  <%a=@group.memberships.where(req:false).count %>
+
+    <%= link_to "Pending request", show_request_user_group_path(current_user, @group),class:"btn btn-outline-success"%>
+  <span class="badge badge-pill badge-danger"><%=a %></span>
+  </span>
+
   <%end%>
+
 <%= render 'posts/index'%>
