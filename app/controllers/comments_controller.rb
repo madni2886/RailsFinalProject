@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  load_and_authorize_resource
   def new
     @comments = Comment.new
   end
@@ -9,23 +10,25 @@ class CommentsController < ApplicationController
 
   def create
 
-    @comments = Comment.new(comment_params)
+    @comments      = Comment.create(comment_params)
     @comments.user = current_user
     @comments.post = Post.find(params[:post_id])
     @post = Post.find(params[:post_id])
-    respond_to do | format |
-      if @comments.save
-        format.html { redirect_to user_group_post_path(current_user, @post.group, @comments.post), notice: "Comment Created" }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-      end
+
+    if @comments.save
+    respond_to do |format|
+          format.html { redirect_to user_group_post_path(current_user, @post.group, @comments.post), notice: "Comment Created" }
     end
-  end
+    else
+
+    end
+    end
 
   private
 
   def comment_params
-    params.require(:comment).permit(:comment, :user_id, :post_id)
+
+    params.require(:comment).permit(:content, :user_id, :post_id)
 
   end
 end

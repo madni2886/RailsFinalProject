@@ -1,0 +1,28 @@
+<%= form_with(model: [current_user, @post.group, @post, content] ,remote:true) do | form | %>
+
+  <%= form.label :text, "Text:" %>
+  <%= form.text_area :content %>
+  <div class="actions">
+  <div class="btn btn-xs btn-danger">
+    <%= form.submit "Create Comment" , :onclick => "myFun()"%>
+
+  </div>
+  </div>
+
+<% end %>
+<script>
+    function myFun(){
+alert("ajax call")
+        $.ajax({
+            type: 'POST',
+            url: '/users/1/groups/2/posts/1/comments',
+            dataType: 'Script',
+            data: {data: comment}
+
+        }).done(function(response){
+            debugger
+            console.log(response)})
+        debugger
+
+  };
+</script>

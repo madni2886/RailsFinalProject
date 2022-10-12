@@ -1,6 +1,6 @@
 class UserMailer < ApplicationMailer
 
-  def oncreate
+  def send_email
      @greeting = "Hi"
      @user=params[:user]
      @group=params[:group]

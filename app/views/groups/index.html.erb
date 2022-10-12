@@ -1,28 +1,13 @@
 <h1 class="center">Groups</h1>
-<% if current_user.plan == "Premium" %>
+<% if can?  :create, Group %>
   <%= link_to "Create Group", new_user_group_path(current_user), class: "btn btn-outline-success" %>
 <% end %>
 </h1>
 <hr>
 <div class="flex_products">
-  <% @group.each do | group | %>
-    <% y = group.memberships.where(user_id: current_user.id) %>
+  <% @groups.each do | group | %>
 
-    <% if y[0] == nil %>
-      <% userid = -1 %>
-      <% req = false %>
-    <% else %>
-      <% userid = y[0].user_id %>
-      <% req = y[0].req %>
-    <% end %>
-    <% x = group.memberships.where(user_id: current_user.id) %>
-
-    <% if x[0] == nil %>
-      <% userid = -1 %>
-    <% else %>
-      <% userid = x[0].user_id %>
-    <% end %>
-
+    <% check_request = group.check_request_status(current_user) %>
 
     <div class="products" ,style=" border-radius: 25px;background: #73AD21;border: 2px solid #73AD21;">
       <% if group.image.attached? %>
@@ -47,37 +32,31 @@
       </div>
       </div>
       <div class="Button">
-        <% if req == true || group.group_type == "public" || group.group_type == "Public" %>
-          <p> Visit and enjoy</p>
+        <% if check_request || group.group_type == "public" %>
 
+          <p class="center"> Visit and enjoy</p>
         <% else %>
-
-          <% if group.memberships.find_by_user_id(current_user.id) != nil && req == false %>
-            <p>Request is pending</p>
+          <% if group.memberships.find_by_user_id(current_user.id) != nil && !check_request %>
+            <p class="center">Request is pending</p>
           <% else %>
-            <p>Not followed yet</p>
+            <p class="center">Not followed yet</p>
           <% end %>
         <% end %>
-        <% if req == true || group.group_type == "public" || group.group_type == "Public" %>
+        <% if check_request == true || group.group_type == "public" %>
           <%= link_to "SHOW", user_group_path(current_user, group), class: "btn btn-outline-success" %>
         <% end %>
-        <% x = group.users %>
-        <% if x[0].id == current_user.id %>
+        <% group_admin = group.users %>
+        <% if group_admin[0].id == current_user.id %>
           <%= link_to "Edit", edit_user_group_path(current_user, group), class: "btn btn-outline-success", style: "margin:18px;" %>
         <% end %>
-
-        <% m = Membership.find_by(user_id: current_user.id, group_id: group.id) %>
-        <% if m == nil %>
+        <% member = Membership.find_by(user_id: current_user.id, group_id: group.id) %>
+        <% if member == nil %>
           <%= link_to link_to "Join", join_user_group_path(current_user, group),
                               class: "btn btn-outline-success" %>
-
-
         <% end %>
 
       </div>
     </div>
-
   <% end %>
 
 </div>
-
