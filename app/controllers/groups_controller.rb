@@ -3,8 +3,8 @@ class GroupsController < ApplicationController
   rescue_from CanCan::AccessDenied do | exception |
     flash[:notice] = "User is not admin nor premium"
     redirect_back(fallback_location: root_path)
-    before_action :get_group, only: [:show, :edit, :update, :join, :show_request, :accept_request, :generate_url]
   end
+  before_action :get_group, only: [:show, :edit, :update, :join, :show_request, :accept_request, :generate_url]
 
   def index
     @groups = Group.order(:id)
@@ -73,6 +73,10 @@ class GroupsController < ApplicationController
   end
 
   def show
+    if !@group.check_request_status(current_user)
+      redirect_to root_path, notice: "You are not member of this group"
+    end
+
     @post = @group.posts.all
 
   end

@@ -6,12 +6,12 @@
   Comments:
 </strong>
 <div id="com">
-  <%@comments=@post.comments %>
+  <% @comments = @post.comments %>
   <% @comments.each do | comment | %>
-  <%= render 'comments/content', comment: comment %>
+    <%= render 'comments/content', comment: comment %>
 
   <% end %>
-    </div>
-<%= render 'comments/form', content: @post.comments.create,remote:true%>
+</div>
+<%= render 'comments/form', content: @post.comments.create, remote: true %>
 
 

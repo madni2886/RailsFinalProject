@@ -18,8 +18,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :groups
   has_many :posts
   has_many :comments, dependent: :destroy
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, authentication_keys: [:email]
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, authentication_keys: [:email]
   # validate :validate_username
   #
   # def validate_username
@@ -47,6 +46,7 @@ class User < ApplicationRecord
   def before_add_method(role)
     # do something before it gets added
   end
+
 end
 
 

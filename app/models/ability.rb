@@ -4,29 +4,28 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    @user = user
     if user.has_role? :admin
       can :manage, :all
     elsif user.plan == "basic"
       can :manage, Group
       can :manage, Post, user_id: user.id
-      can :create, Post, user_id: user.id
       cannot :create, Group
     elsif user.plan == "Premium"
       can :manage, Group
       can :manage, Post, user_id: user.id
-      can :create, Post, user_id: user.id
       can :create, Group
-    else
-      can :manage, Post, user_id: user.id
-      can :create, Post, user_id: user.id
-      can :read, :all
 
-      # can :update, Article do |article|
-      #   article.user == user
-      # end
-      # can :destroy, Article do |article|
-      #   article.user == user
-      # end
+    else can :manage, Post, user_id: user.id
+    can :create, Post, user_id: user.id
+    can :read, :all
+
+    # can :update, Article do |article|
+    #   article.user == user
+    # end
+    # can :destroy, Article do |article|
+    #   article.user == user
+    # end
 
     end
   end
