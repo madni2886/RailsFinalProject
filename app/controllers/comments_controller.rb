@@ -1,31 +1,29 @@
 class CommentsController < ApplicationController
   load_and_authorize_resource
+  before_action :get_this
+  protect_from_forgery with: :null_session
 
   def new
     @comments = Comment.new
   end
 
   def index
-    @comments = Comment.all
+    @comments = Comment
   end
 
   def create
 
-    @comments      = Comment.create(comment_params)
+    @comments      = @post.comments.build(comment_params)
     @comments.user = current_user
-    @comments.post = Post.find(params[:post_id])
-    @post          = Post.find(params[:post_id])
-
-    if @comments.save
-      respond_to do | format |
-        format.html { redirect_to user_group_post_path(current_user, @post.group, @comments.post), notice: "Comment Created" }
-      end
-    else
-
-    end
+    @comments.save
   end
 
   private
+
+  def get_this
+    @group = Group.find(params[:group_id])
+    @post  = Post.find(params[:post_id])
+  end
 
   def comment_params
 
