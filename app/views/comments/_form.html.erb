@@ -6,22 +6,3 @@
     <%= button_to 'submit', "", class: 'btn btn-danger ms-5' ,onclick:"ajax_call();" %>
   </div>
 <% end %>
-
-<script>
-    function ajax_call() {
-        alert(" i am calling from ajax call")
-        $.ajax({
-            type: 'POST',
-            url: 'user/1/groups/2/posts/16/comments/',
-            dataType: 'Script',
-            data: {data: "hello"}
-
-        }).done(function (response) {
-
-
-            console.log(response)
-        })
-
-
-    }
-</script>

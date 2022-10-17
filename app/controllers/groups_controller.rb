@@ -7,7 +7,7 @@ class GroupsController < ApplicationController
   before_action :get_group, only: [:show, :edit, :update, :join, :show_request, :accept_request, :generate_url]
 
   def index
-    @groups = Group.order(:id)
+    @groups = Group.page(params[:page]).per(10).order(id: :asc)
   end
 
   def new
@@ -18,11 +18,11 @@ class GroupsController < ApplicationController
     @group = current_user.groups.create(group_params)
     @join  = @group.memberships.build(:user_id => current_user.id, :req => 1)
     respond_to do | format |
-      if @group.save || @join.save
-        UserMailer.with(user: current_user, group: @group).send_email.deliver_now
-        format.html { redirect_to root_path, notice: "Group was successfully created." }
+      if !(@group.save || @join.save)
+        format.html { render :new, status: :unprocessable_entity }
 
-      else format.html { render :new, status: :unprocessable_entity }
+      else UserMailer.with(user: current_user, group: @group).send_email.deliver_now
+        format.html { redirect_to root_path, notice: "Group was successfully created." }
       end
     end
   end
@@ -33,28 +33,7 @@ class GroupsController < ApplicationController
   end
 
   def update
-    if @group.update(group_params)
-      flash[:notice] = "Group was successfully updated"
-      redirect_to root_path
-    else render "edit"
-    end
-
-  end
-
-  def join
-
-    if @group.group_type == "Public"
-      @join = @group.memberships.build(:user_id => current_user.id, :req => 1)
-      respond_to do | format |
-        @join.save ? format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have joined this group.") } :
-          format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have already joined this group") }
-      end
-    else @join = @group.memberships.build(:user_id => current_user.id, :req => 0)
-    respond_to do | format |
-      @join.save ? format.html { redirect_to(root_path, :notice => "request successfuly send") } :
-        format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have already joined this group") }
-    end
-    end
+    redirect_to root_path, :notice => "Group was successfully updated" if @group.update(group_params)
 
   end
 
@@ -64,20 +43,32 @@ class GroupsController < ApplicationController
   end
 
   def accept_request
-    @user           = User.find(params[:user_id])
-    @membership     = @group.memberships.find_by_user_id(@user.id)
-    @membership.req = true
 
+    @membership = @group.memberships.find_by_user_id(@user.id)
+    @membership.update(req: true)
     redirect_back(fallback_location: root_path) if @membership.save
 
   end
 
   def show
-    if !@group.check_request_status(current_user)
-      redirect_to root_path, notice: "You are not member of this group"
-    end
-
+    redirect_to root_path, notice: "You are not member of this group" if !@group.check_request_status(current_user)
     @post = @group.posts.all
+  end
+
+  def join
+
+    if @group.group_type != "Public"
+      @join = @group.memberships.build(:user_id => current_user.id, :req => 0)
+      respond_to do | format |
+        @join.save ? format.html { redirect_to(root_path, :notice => "request successfuly send") } :
+          format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have already joined this group") }
+      end
+    else @join = @group.memberships.build(:user_id => current_user.id, :req => 1)
+    respond_to do | format |
+      @join.save ? format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have joined this group.") } :
+        format.html { redirect_to(user_group_path(current_user, @group), :notice => "You have already joined this group") }
+    end
+    end
 
   end
 
@@ -90,7 +81,7 @@ class GroupsController < ApplicationController
 
   def get_group
     @group = Group.find(params[:id])
-
+    @user  = User.find(params[:user_id])
   end
 
 end

@@ -12,23 +12,19 @@ class CommentsController < ApplicationController
   end
 
   def create
-
     @comments      = @post.comments.build(comment_params)
     @comments.user = current_user
     @comments.save
   end
 
   private
-
   def get_this
     @group = Group.find(params[:group_id])
     @post  = Post.find(params[:post_id])
   end
 
   def comment_params
-
     params.require(:comment).permit(:content, :user_id, :post_id)
-
   end
 end
 

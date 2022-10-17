@@ -40,6 +40,23 @@ document.addEventListener("turbolinks:load", () => {
     })
 })
 
+
+function ajax_call() {
+    alert(" i am calling from ajax call")
+    $.ajax({
+        type: 'POST',
+        url: 'user/1/groups/2/posts/16/comments/',
+        dataType: 'Script',
+        data: {data: "hello"}
+
+    }).done(function (response) {
+
+
+        console.log(response)
+    })
+
+
+}
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()

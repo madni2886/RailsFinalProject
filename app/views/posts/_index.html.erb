@@ -10,6 +10,7 @@
 </i>
 <% i = 0 %>
 <div class="container d-flex flex-wrap align-items-center">
+
   <% @post.each do | post | %>
     <% if can? :create, Group %>
       <div class="cards" style="width: 18rem;">

@@ -1,10 +1,11 @@
 <h1 class="center">Groups</h1>
-<% if can?  :create, Group %>
+<% if can? :create, Group %>
   <%= link_to "Create Group", new_user_group_path(current_user), class: "btn btn-outline-success" %>
 <% end %>
 </h1>
 <hr>
 <div class="flex_products">
+
   <% @groups.each do | group | %>
 
     <% check_request = group.check_request_status(current_user) %>
@@ -36,7 +37,7 @@
 
           <p class="center"> Visit and enjoy</p>
         <% else %>
-          <% if group.memberships.find_by_user_id(current_user.id) != nil && !check_request %>
+          <% if check_request!= nil && !check_request %>
             <p class="center">Request is pending</p>
           <% else %>
             <p class="center">Not followed yet</p>
@@ -45,8 +46,8 @@
         <% if check_request == true || group.group_type == "public" %>
           <%= link_to "SHOW", user_group_path(current_user, group), class: "btn btn-outline-success" %>
         <% end %>
-        <% group_admin = group.users %>
-        <% if group_admin[0].id == current_user.id %>
+
+        <% if group.get_group_admin.id == current_user.id %>
           <%= link_to "Edit", edit_user_group_path(current_user, group), class: "btn btn-outline-success", style: "margin:18px;" %>
         <% end %>
         <% member = Membership.find_by(user_id: current_user.id, group_id: group.id) %>
@@ -59,4 +60,7 @@
     </div>
   <% end %>
 
+</div>
+<div style="align-content: center">
+  <%= paginate @groups %>
 </div>

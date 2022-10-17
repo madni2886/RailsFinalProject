@@ -3,19 +3,19 @@ class UserController < ApplicationController
   rescue_from CanCan::AccessDenied do | exception |
     flash[:notice] = "You are not admin"
     redirect_back(fallback_location: root_path)
-
+    before_action :get_user
   end
 
   def change_plan
 
     @admin = current_user
-    @user  = User.find(params[:id])
+
 
   end
 
   def update
     @admin = current_user
-    @user  = User.find(params[:id])
+
     @user.update(user_params)
     if @user.save
       redirect_to showUser_path
@@ -26,11 +26,13 @@ class UserController < ApplicationController
 
   def show
     @admin = current_user
-    @user  = User.find(params[:id])
+
   end
 
   protected
-
+  def get_user
+    @user  = User.find(params[:id])
+  end
   def user_params
     params.require(:user).permit(:username, :plan)
   end
